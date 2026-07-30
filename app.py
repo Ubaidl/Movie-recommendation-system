@@ -1,30 +1,27 @@
 import streamlit as st
 import pickle
 import requests
+import gdown
 import os
 
-# Download similarity.pkl if not already present
+FILE_ID = "16BrDs6cqTENcygnMJtaSTRIeBrYLlZxo"
+
 @st.cache_resource
 def load_similarity():
-    url = "https://github.com/Ubaidl/Movie-recommendation-system/releases/download/v1.0/similarity.pkl"
     if not os.path.exists('similarity.pkl'):
         with st.spinner("Downloading similarity matrix..."):
-            r = requests.get(url, timeout=60)
-            r.raise_for_status()
-            with open('similarity.pkl', 'wb') as f:
-                f.write(r.content)
+            gdown.download(id=FILE_ID, output='similarity.pkl', quiet=False)
     with open('similarity.pkl', 'rb') as f:
         return pickle.load(f)
 
-if not os.path.exists('similarity.pkl'):
-    try:
-        _ = load_similarity()
-    except Exception as e:
-        st.error(f"Failed to download similarity.pkl: {e}")
-        st.stop()
+try:
+    similarity = load_similarity()
+except Exception as e:
+    st.error(f"Failed to download similarity.pkl: {e}")
+    st.error("Check that the Google Drive file is shared as 'Anyone with the link → Viewer'.")
+    st.stop()
 
 movies = pickle.load(open('movies.pkl', 'rb'))
-similarity = load_similarity()
 
 API_KEY = "a7438f3baf47765e86c7ea8d849b2600"
 
