@@ -5,10 +5,10 @@ import gdown
 import os
 
 # Download similarity.pkl if not already present
+# Download similarity.pkl if not already present
 if not os.path.exists('similarity.pkl'):
     file_id = "16BrDs6cqTENcygnMJtaSTRIeBrYLlZxo"
-    url = f"https://drive.google.com/uc?id={file_id}"
-    gdown.download(url, 'similarity.pkl', quiet=False, fuzzy=True)
+    gdown.download(id=file_id, output='similarity.pkl', quiet=False)
 
 if not os.path.exists('similarity.pkl'):
     st.error("Failed to download similarity.pkl. Please check the Google Drive link and sharing permissions.")
